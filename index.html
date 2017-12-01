@@ -11,4 +11,12 @@
 <body>
 <script src="bioC.json"></script>
 <script src="bubblechart.js"></script>
+<script>
+	$(document).keydown(
+		function(e) {
+			// esc escapes out of info screen
+			if (e.keyCode === 27) curtainClick();
+		}
+	);
+</script>
 </body>
