@@ -6,4 +6,12 @@ Explore Bioconductor packages more nicely
 
     git clone https://github.com/Shians/BioCExplorer.git
 
-Open `index.html`
+Run the script `get_data.R`, either inside an R session:
+    
+    R> source("get_data.R")
+
+or from the terminal
+
+    Rscript get_data.R
+
+then open `index.html`.
