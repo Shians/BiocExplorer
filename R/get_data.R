@@ -1,13 +1,21 @@
+#' Get data from bioconductor
+#'
+#' @return json string containing bioconductor package details
+#' @export
+#'
+#' @examples
+#' bioc_data <- get_bioc_data
 get_bioc_data <- function() {
-    pkg_list <- BiocPkgTools::getBiocPkgList()
-    raw_dl_stats <- BiocPkgTools::getBiocDownloadStats()
-
-    full_data <- process_data(pkg_list, raw_dl_stats)
+    full_data <- process_data(
+        pkg_list = BiocPkgTools::getBiocPkgList(),
+        raw_dl_stats = BiocPkgTools::getBiocDownloadStats()
+    )
 
     jsonlite::toJSON(full_data)
 }
 
-process_data <- function(raw_dl_stats, pkg_list) {
+# process retrieved data into required data.frame columns
+process_data <- function(pkg_list, raw_dl_stats) {
     dl_stats <- summarise_dl_stats(raw_dl_stats)
 
     pkg_link <- function(pkg) {
@@ -43,6 +51,7 @@ process_data <- function(raw_dl_stats, pkg_list) {
     full_data
 }
 
+# summarise download stats into monthly and total lifetime downloads
 summarise_dl_stats <- function(dl_stats) {
     dl_stats %>%
         dplyr::group_by(Package) %>%
@@ -52,6 +61,8 @@ summarise_dl_stats <- function(dl_stats) {
         )
 }
 
+# collapse list of names into a comma separated string
+# final two authors separated by 'and'
 author_list_to_string <- function(authors) {
     collapse_list <- function(x) unlist(x) %>% paste(collapse = ", ")
     sapply(authors, collapse_list) %>%

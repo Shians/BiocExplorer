@@ -2,5 +2,5 @@ dependencies:
   - name: bioc_explore
     version: 1.0.0
     src: htmlwidgets/lib/bioc_explore
-    script:
-      - bioc_explore.js
+    script: 
+    stylesheet:
