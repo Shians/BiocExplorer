@@ -46,7 +46,6 @@ full_data$authors <- sapply(full_data$authors, collapse_list) %>%
     str_replace(" and ", ", ") %>%
     str_replace(",([^,]*)$", " and\\1")
 
-
 json <- toJSON(full_data)
 
 write_file(paste("var data =", json), "bioC.json")

@@ -1,0 +1,13 @@
+Package: BioCExplorer
+Title: More beautiful exploration of Bioconductor packages
+Version: 0.0.0.9000
+Authors@R: person(
+    "Shian", "Su",
+    email = "su.s@wehi.edu.au",
+    role = c("aut", "cre")
+)
+Description: Creates htmlwidgets to display Bioconductor packages.
+Depends: R (>= 3.4.2)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
