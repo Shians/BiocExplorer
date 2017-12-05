@@ -12,7 +12,6 @@ Imports:
     BiocPkgTools,
     dplyr,
     jsonlite,
-    readr,
     stringr
 License: GPL-3.0
 Encoding: UTF-8
