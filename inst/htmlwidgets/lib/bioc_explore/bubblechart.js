@@ -1,9 +1,33 @@
 function htmlWidgetsHook(el, width, height, data) {
-    drawBubblePlot(el, width, height, data);
+    drawBubblePlot(el, width, height, data, true);
 }
 
-function drawBubblePlot(el, width, height, data) {
-    window.data = data;
+function htmlResizeHook(width, height) {
+    updateBubblePlot(width, height);
+}
+
+function updateBubblePlot(width, height) {
+    console.log("Height: ", height);
+    console.log("Width: ", width);
+    d3.select(el)
+        .select("div")
+        .remove();
+
+    drawBubblePlot(window.el, width, height, window.data, false);
+}
+
+function drawBubblePlot(el, width, height, data, reformat_data) {
+    if (reformat_data) {
+        data = get_unique(data);
+        data = data.sort(function(a,b) { return b.downloads_month - a.downloads_month; });
+        // convert numerical values from strings to numbers
+        data = data.map(function(d){ d.value = Math.sqrt(+d.downloads_total); return d; });
+        // split tags
+        data = data.map(function(d){ d.tags = typeof d.tags === "undefined" ? "" : d.tags.split(","); return d; });        
+        
+        window.data = data;
+        window.el = el;
+    }
     var diameter = Math.min(width, height), // max size of the bubbles
         color    = d3.scale.category20c(); // color category
 
@@ -19,14 +43,6 @@ function drawBubblePlot(el, width, height, data) {
         .append("svg")
         .attr("width", diameter)
         .attr("height", diameter)
-        .attr("class", "bubble");
-
-    data = get_unique(data);
-    data = data.sort(function(a,b) { return b.downloads_month - a.downloads_month; });
-    // convert numerical values from strings to numbers
-    data = data.map(function(d){ d.value = Math.sqrt(+d.downloads_total); return d; });
-    // split tags
-    data = data.map(function(d){ d.tags = typeof d.tags === "undefined" ? "" : d.tags.split(","); return d; });
 
     var allTags = _.flatten(data.map(function(d) { return d.tags; }));
     var tagCount = _.countBy(allTags, function(d) { return d; });

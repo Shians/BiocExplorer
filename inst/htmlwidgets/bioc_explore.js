@@ -15,7 +15,7 @@ HTMLWidgets.widget({
       },
 
       resize: function(width, height) {
-        // htmlWidgetsHook(el, width, height, x.data);
+        htmlResizeHook(width, height);
       }
 
     };
