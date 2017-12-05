@@ -1,5 +1,5 @@
-var diameter = 800, //max size of the bubbles
-    color    = d3.scale.category20c(); //color category
+var diameter = 800, // max size of the bubbles
+    color    = d3.scale.category20c(); // color category
 
 var bubble = d3.layout.pack()
     .sort(function(a,b) { return b.downloads_month - a.downloads_month; })
@@ -17,21 +17,21 @@ var svg = d3.select("body")
 
 data = get_unique(data);
 data = data.sort(function(a,b) { return b.downloads_month - a.downloads_month; });
-//convert numerical values from strings to numbers
+// convert numerical values from strings to numbers
 data = data.map(function(d){ d.value = Math.sqrt(+d.downloads_total); return d; });
 
 var allTags = _.flatten(data.map(function(d){return d.tags;}));
 var tagCount = _.countBy(allTags, function(d) { return d; });
 allTags = _.uniq(allTags).filter(function(d) { return tagCount[d] > 10; });
 
-
+// take first 200 
 var partialData = data.slice(0,199);
 
 function drawChart(data) {
-    //bubbles needs very specific format, convert data to this.
+    // bubbles needs very specific format, convert data to this.
     var nodes = bubble.nodes({children:data}).filter(function(d) { return !d.children; });
 
-    //setup the chart
+    // setup the chart
     var container = d3.select("svg").select("g");
 
     if (container.empty()) {
@@ -66,7 +66,7 @@ function drawChart(data) {
     bubbles.append("title")
             .text(function(d) { return d.name + ": " + String(d.downloads_total); });
 
-    //create the bubbles
+    // create the bubbles
     bubbles.append("circle")
             .attr("r", function(d){ return 0; })
             .on("click", function(d) { clickFunc(d); })
@@ -75,7 +75,7 @@ function drawChart(data) {
             .delay(function(d, i) { return Math.floor(20*i/data.length)*50; })
             .attr("r", function(d){ return d.r; });
 
-    //format the text for each bubble
+    // format the text for each bubble
     bubbles.append("text")
             .attr("class", "bubble-text")
             .attr("dy", ".3em")
@@ -238,7 +238,7 @@ function populateInfoBox(name, downloads_month, description, license, authors, p
     fillSection("downloads", "Downloads Last Month", downloads_month);
     fillSection("license", "License", license);
     fillSection("authors", "Authors", authors);
-    fillSection("install", "Install", "source(\"https://bioconductor.org/biocLite.R\")<br />biocLite(\"" + name + "\")");
+    fillSection("install", "Install", "source(\"https:// bioconductor.org/biocLite.R\")<br />biocLite(\"" + name + "\")");
 
     d3.select("div.info-box")
         .select(".row.page")
