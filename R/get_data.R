@@ -12,8 +12,8 @@ get_bioc_data <- function() {
     )
 
     full_data$tags <- as.character(full_data$tags) %>%
-        stringr::str_remove_all("[[:blank:]]") %>%
-        stringr::str_remove_all("\n")
+        stringr::str_replace_all("[[:blank:]]", "") %>%
+        stringr::str_replace_all("\n", "")
 
     full_data <- full_data %>%
         dplyr::filter(!is.na(tags))
@@ -77,6 +77,6 @@ summarise_dl_stats <- function(dl_stats) {
 author_list_to_string <- function(authors) {
     collapse_list <- function(x) unlist(x) %>% paste(collapse = ", ")
     sapply(authors, collapse_list) %>%
-        str_replace(" and ", ", ") %>%
-        str_replace(",([^,]*)$", " and\\1")
+        stringr::str_replace(" and ", ", ") %>%
+        stringr::str_replace(",([^,]*)$", " and\\1")
 }
