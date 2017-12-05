@@ -11,17 +11,11 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(x) {
-
-        // TODO: code to render the widget, e.g.
-        el.innerText = x.data.message + " " + width + " " + height;
-
+        htmlWidgetsHook(el, width, height, x.data);
       },
 
       resize: function(width, height) {
-
-        // TODO: code to re-render the widget with a new size
-        el.innerText = x.message + " " + width + " " + height;
-
+        // htmlWidgetsHook(el, width, height, x.data);
       }
 
     };
