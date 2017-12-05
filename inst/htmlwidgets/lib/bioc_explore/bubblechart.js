@@ -3,6 +3,7 @@ function htmlWidgetsHook(el, width, height, data) {
 }
 
 function drawBubblePlot(el, width, height, data) {
+    window.data = data;
     var diameter = Math.min(width, height), // max size of the bubbles
         color    = d3.scale.category20c(); // color category
 
@@ -24,8 +25,10 @@ function drawBubblePlot(el, width, height, data) {
     data = data.sort(function(a,b) { return b.downloads_month - a.downloads_month; });
     // convert numerical values from strings to numbers
     data = data.map(function(d){ d.value = Math.sqrt(+d.downloads_total); return d; });
+    // split tags
+    data = data.map(function(d){ d.tags = typeof d.tags === "undefined" ? "" : d.tags.split(","); return d; });
 
-    var allTags = _.flatten(data.map(function(d){return d.tags;}));
+    var allTags = _.flatten(data.map(function(d) { return d.tags; }));
     var tagCount = _.countBy(allTags, function(d) { return d; });
     allTags = _.uniq(allTags).filter(function(d) { return tagCount[d] > 10; });
 
@@ -90,6 +93,13 @@ function drawBubblePlot(el, width, height, data) {
     }
 
     drawChart(data);
+
+    $(document).keydown(
+		function(e) {
+			// esc escapes out of info screen
+			if (e.keyCode === 27) curtainClick();
+		}
+	);
 
     function clickFunc(d) {
         curtainUp();

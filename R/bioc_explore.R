@@ -3,9 +3,7 @@
 bioc_explore <- function(width = NULL, height = NULL, elementId = NULL) {
 
     # read the gexf file
-    data <- readRDS(
-        "/Users/su.s/Programs/R/BioCExplorer/extdata/data.Rds"
-    )
+    data <- get_bioc_data()
 
     # create a list that contains the settings
     settings <- list(

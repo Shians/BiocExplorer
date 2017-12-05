@@ -11,6 +11,13 @@ get_bioc_data <- function() {
         raw_dl_stats = BiocPkgTools::getBiocDownloadStats()
     )
 
+    full_data$tags <- as.character(full_data$tags) %>%
+        stringr::str_remove_all("[[:blank:]]") %>%
+        stringr::str_remove_all("\n")
+
+    full_data <- full_data %>%
+        dplyr::filter(!is.na(tags))
+
     jsonlite::toJSON(full_data)
 }
 
@@ -23,6 +30,10 @@ process_data <- function(pkg_list, raw_dl_stats) {
             "http://bioconductor.org/packages/release/bioc/html/${pkg}.html"
         )
     }
+
+    # convert from factor to character to avoid inner_join warning
+    pkg_list$Package <- as.character(pkg_list$Package)
+    dl_stats$Package <- as.character(dl_stats$Package)
 
     full_data <- dplyr::inner_join(pkg_list, dl_stats, by = "Package") %>%
         dplyr::select(
