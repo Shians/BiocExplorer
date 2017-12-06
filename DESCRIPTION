@@ -9,6 +9,7 @@ Authors@R:
     )
 BugReports: https://github.com/shians/biocexplorer/issues
 Description: Creates htmlwidgets to display Bioconductor packages.
+biocViews: Software
 Depends: R (>= 3.4.2), magrittr
 Imports:
     BiocPkgTools,
