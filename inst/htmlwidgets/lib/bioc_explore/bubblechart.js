@@ -173,7 +173,7 @@ function drawBubblePlot(el, width, height, data, reformat_data) {
                         .attr("class", "dropdown")
                         .style("position", "absolute")
                         .style("top", "10px")
-                        .style("left", "810px");
+                        .style("left", "0px");
     
         outer.append("button")
                 .attr("class", "btn btn-primary dropdown-toggle")
@@ -220,6 +220,8 @@ function drawBubblePlot(el, width, height, data, reformat_data) {
     }
     
     function drawInfoBox() {
+        // remove old info box
+        d3.select("div.info-box").remove();
         d3.select("body")
             .append("div")
             .attr("class", "info-box")
