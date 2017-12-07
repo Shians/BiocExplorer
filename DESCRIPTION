@@ -1,6 +1,6 @@
 Package: BioCExplorer
 Title: More beautiful exploration of Bioconductor packages
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: 
     person(
         "Shian", "Su",
