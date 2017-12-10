@@ -1,5 +1,7 @@
 function htmlWidgetsHook(el, width, height, data) {
-    drawBubblePlot(el, width, height, data, true);
+    window.data = data;
+    window.el = el;
+    drawBubblePlot(el, width, height, data.data, data.top, true);
 }
 
 function htmlResizeHook(width, height) {
@@ -7,16 +9,15 @@ function htmlResizeHook(width, height) {
 }
 
 function updateBubblePlot(width, height) {
-    console.log("Height: ", height);
-    console.log("Width: ", width);
     d3.select(el)
         .select("div")
         .remove();
 
-    drawBubblePlot(window.el, width, height, window.data, false);
+    drawBubblePlot(window.el, width, height, window.data.data, window.data.top, false);
 }
 
-function drawBubblePlot(el, width, height, data, reformat_data) {
+function drawBubblePlot(el, width, height, data, top, reformat_data) {
+    // data needs to be reformatted for bubble structure
     if (reformat_data) {
         data = get_unique(data);
         data = data.sort(function(a,b) { return b.downloads_month - a.downloads_month; });
@@ -24,9 +25,6 @@ function drawBubblePlot(el, width, height, data, reformat_data) {
         data = data.map(function(d){ d.value = Math.sqrt(+d.downloads_total); return d; });
         // split tags
         data = data.map(function(d){ d.tags = typeof d.tags === "undefined" ? "" : d.tags.split(","); return d; });        
-        
-        window.data = data;
-        window.el = el;
     }
     var diameter = Math.min(width, height), // max size of the bubbles
         color    = d3.scale.category20c(); // color category
@@ -48,8 +46,7 @@ function drawBubblePlot(el, width, height, data, reformat_data) {
     var tagCount = _.countBy(allTags, function(d) { return d; });
     allTags = _.uniq(allTags).filter(function(d) { return tagCount[d] > 10; });
 
-    // take first 200 
-    var partialData = data.slice(0, 149);
+    var partialData = topFilter(data, top);
 
     function drawChart(data) {
         // bubbles needs very specific format, convert data to this.
@@ -64,7 +61,6 @@ function drawBubblePlot(el, width, height, data, reformat_data) {
             drawOptions();
             drawBackground();
             drawInfoBox();
-            layoutInfoBox();
         }
 
         var bubbleSelect = container.selectAll(".bubble").data(nodes, function(d) { return d.name; });
@@ -108,7 +104,7 @@ function drawBubblePlot(el, width, height, data, reformat_data) {
                 .text(function(d) {return d.name.substring(0, d.r/4); });
     }
 
-    drawChart(data);
+    drawChart(partialData);
 
     $(document).keydown(
 		function(e) {
@@ -173,7 +169,7 @@ function drawBubblePlot(el, width, height, data, reformat_data) {
                         .attr("class", "dropdown")
                         .style("position", "absolute")
                         .style("top", "10px")
-                        .style("left", "0px");
+                        .style("left", "10px");
     
         outer.append("button")
                 .attr("class", "btn btn-primary dropdown-toggle")
@@ -221,17 +217,23 @@ function drawBubblePlot(el, width, height, data, reformat_data) {
     
     function drawInfoBox() {
         // remove old info box
-        d3.select("div.info-box").remove();
-        d3.select("body")
-            .append("div")
-            .attr("class", "info-box")
-            .style({"position": "absolute",
-                    "width": "400px",
-                    "z-index": "100",
-                    "background": "#ffffff",
-                    "opacity": 0.0,
-                    "pointer-events": "none"})
-            .on("click", infoBoxClick);
+        var sel = d3.select("div.info-box");
+        if (sel.node() == null) {
+            d3.select("body")
+                .append("div")
+                .attr("class", "info-box")
+                .style({"position": "absolute",
+                "width": "400px",
+                "z-index": "100",
+                "background": "#ffffff",
+                "opacity": 0.0,
+                "pointer-events": "none"})
+                .on("click", infoBoxClick);
+
+            layoutInfoBox();
+        }
+
+        
     }
     
     function layoutInfoBox() {
@@ -316,7 +318,7 @@ function drawBubblePlot(el, width, height, data, reformat_data) {
     }
     
     function topFilter(data, n) {
-        return data.slice(0, n-1);
+        return data.slice(0, n);
     }
     
     function tagFilter(data, tag) {
@@ -325,6 +327,7 @@ function drawBubblePlot(el, width, height, data, reformat_data) {
     
     function filterByTag(tag) {
         partialData = tagFilter(data, tag);
+        partialData = topFilter(partialData, top)
         drawChart(partialData);
     }
 }
