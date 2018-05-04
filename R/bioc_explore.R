@@ -23,7 +23,7 @@ bioc_explore <- function(top = 500, ...) {
     # create widget
     htmlwidgets::createWidget(
         name = 'bioc_explore',
-        package = 'BioCExplorer',
+        package = 'BiocExplorer',
         x = x,
         ...
     )

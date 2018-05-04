@@ -1,4 +1,4 @@
-# BioCExplorer
+# BiocExplorer
 
 Explore Bioconductor packages more nicely
 
@@ -7,6 +7,6 @@ Explore Bioconductor packages more nicely
 Inside R
 
     devtools::install_github("seandavi/BiocPkgTools")
-    devtools::install_github("shians/BioCExplorer")
-    library(BioCExplorer)
+    devtools::install_github("shians/BiocExplorer")
+    library(BiocExplorer)
     bioc_explore()
