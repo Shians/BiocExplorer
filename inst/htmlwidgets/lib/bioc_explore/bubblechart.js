@@ -63,22 +63,25 @@ function drawBubblePlot(el, width, height, data, top, reformat_data) {
             drawInfoBox();
         }
 
+        // redraw existing bubbles
         var bubbleSelect = container.selectAll(".bubble").data(nodes, function(d) { return d.name; });
-
         bubbleSelect.attr("class", "node bubble")
                     .transition(250)
                     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
                     .selectAll("circle")
                     .attr("r", function(d) { return d.r; });
 
+        // resize existing text
         bubbleSelect.selectAll("text")
                     .text(function(d) { return d.name.substring(0, d.r/4); });
 
+        // draw new bubbles
         var bubbles = bubbleSelect.enter()
                                 .append("g")
                                 .attr("class", "node bubble")
                                 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
+        // remove deleted bubbles
         bubbleSelect.exit().remove();
 
         // create mouseover text

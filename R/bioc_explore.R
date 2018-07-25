@@ -1,3 +1,10 @@
+#' Explore Bioconductor packages interactively
+#' @description Explore Bioconductor packages through an interactive bubble plot. Click on bubbles to bring up additional information about the package.
+#' @param top maximum number of packages displayed in any biocView
+#' @param ... parameters passed to \code{htmlwidgets::createWidget()}
+#'
+#' @return bubble plot of Bioconductor packages
+#'
 #' @import htmlwidgets
 #' @export
 bioc_explore <- function(top = 500, ...) {
@@ -25,6 +32,7 @@ bioc_explore <- function(top = 500, ...) {
         name = 'bioc_explore',
         package = 'BiocExplorer',
         x = x,
+        sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress = TRUE),
         ...
     )
 }
