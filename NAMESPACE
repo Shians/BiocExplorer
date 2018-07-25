@@ -2,4 +2,3 @@
 
 export(bioc_explore)
 export(get_bioc_data)
-import(htmlwidgets)

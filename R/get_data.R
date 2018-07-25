@@ -6,6 +6,10 @@
 #' @examples
 #' bioc_data <- get_bioc_data
 get_bioc_data <- function() {
+    if (has_cached_data() && cache_last_update_days() < 7) {
+        return(get_cached_data())
+    }
+
     message("Downloading package data...")
     full_data <- process_data(
         pkg_list = BiocPkgTools::getBiocPkgList(),
@@ -20,7 +24,11 @@ get_bioc_data <- function() {
         dplyr::filter(!is.na(tags))
 
     message("Package data download complete")
-    jsonlite::toJSON(full_data)
+
+    json_data <- jsonlite::toJSON(full_data)
+    write_to_cache(json_data)
+
+    return(json_data)
 }
 
 # process retrieved data into required data.frame columns
@@ -81,4 +89,49 @@ author_list_to_string <- function(authors) {
     sapply(authors, collapse_list) %>%
         stringr::str_replace(" and ", ", ") %>%
         stringr::str_replace(",([^,]*)$", " and\\1")
+}
+
+# get days since cached data was last updated
+cache_last_update_days <- function() {
+    cached_data_path <- system.file(
+        "extdata",
+        "data.Rds",
+        package = "BiocExplorer"
+    )
+    cache_last_mod <- file.info(cached_data_path)$mtime
+
+    difftime(Sys.time(), cache_last_mod, units = "days")
+}
+
+# get cached json data
+get_cached_data <- function() {
+    cached_data_path <- system.file(
+        "extdata",
+        "data.Rds",
+        package = "BiocExplorer"
+    )
+
+    readRDS(cached_data_path)
+}
+
+# write json to cache location
+write_to_cache <- function(json_data) {
+    cached_data_path <- system.file(
+        "extdata",
+        package = "BiocExplorer"
+    ) %>%
+        file.path("data.Rds")
+
+    saveRDS(json_data, cached_data_path)
+}
+
+# check if cached data is available
+has_cached_data <- function() {
+    cached_data_path <- system.file(
+        "extdata",
+        "data.Rds",
+        package = "BiocExplorer"
+    )
+
+    return(cached_data_path != "")
 }

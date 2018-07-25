@@ -5,7 +5,6 @@
 #'
 #' @return bubble plot of Bioconductor packages
 #'
-#' @import htmlwidgets
 #' @export
 bioc_explore <- function(top = 500, ...) {
     # instruction messages
@@ -32,7 +31,6 @@ bioc_explore <- function(top = 500, ...) {
         name = 'bioc_explore',
         package = 'BiocExplorer',
         x = x,
-        sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress = TRUE),
         ...
     )
 }
