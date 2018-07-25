@@ -1,5 +1,5 @@
 #' Explore Bioconductor packages interactively
-#' @description Explore Bioconductor packages through an interactive bubble plot. Click on bubbles to bring up additional information about the package.
+#' @description Explore Bioconductor packages through an interactive bubble plot. Click on bubbles to bring up additional information about the package. Size and proximity to center of a bubble is based on the downloads the package has in the past month.
 #' @param top maximum number of packages displayed in any biocView
 #' @param ... parameters passed to \code{htmlwidgets::createWidget()}
 #'
