@@ -22,9 +22,9 @@ function drawBubblePlot(el, width, height, data, top, reformat_data) {
         data = get_unique(data);
         data = data.sort(function(a,b) { return b.downloads_month - a.downloads_month; });
         // convert numerical values from strings to numbers
-        data = data.map(function(d){ d.value = Math.sqrt(+d.downloads_total); return d; });
+        data = data.map(function(d) { d.value = Math.sqrt(+d.downloads_total); return d; });
         // split tags
-        data = data.map(function(d){ d.tags = typeof d.tags === "undefined" ? "" : d.tags.split(","); return d; });        
+        data = data.map(function(d) { d.tags = typeof d.tags === "undefined" ? "" : d.tags.split(","); return d; });        
     }
     var diameter = Math.min(width, height), // max size of the bubbles
         color    = d3.scale.category20c(); // color category
@@ -69,9 +69,9 @@ function drawBubblePlot(el, width, height, data, top, reformat_data) {
                     .transition(250)
                     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
                     .selectAll("circle")
-                    .attr("r", function(d){ return d.r; })
+                    .attr("r", function(d) { return d.r; })
                     .selectAll("text")
-                    .text(function(d) {return d.name.substring(0, d.r/4); });
+                    .text(function(d) { return d.name.substring(0, d.r/4); });
 
         var bubbles = bubbleSelect.enter()
                                 .append("g")
@@ -80,20 +80,18 @@ function drawBubblePlot(el, width, height, data, top, reformat_data) {
 
         bubbleSelect.exit().remove();
 
-
-
         // create mouseover text
         bubbles.append("title")
-                .text(function(d) { return d.name + ": " + String(d.downloads_total); });
+                .text(function(d) { return `${d.name}: ${d.downloads_total}`; });
 
         // create the bubbles
         bubbles.append("circle")
-                .attr("r", function(d){ return 0; })
+                .attr("r", function(d) { return 0; })
                 .on("click", function(d) { clickFunc(d); })
                 .style("fill", function(d) { return color(d.name); })
                 .transition()
                 .delay(function(d, i) { return Math.floor(20*i/data.length)*50; })
-                .attr("r", function(d){ return d.r; });
+                .attr("r", function(d) { return d.r; });
 
         // format the text for each bubble
         bubbles.append("text")
@@ -101,7 +99,7 @@ function drawBubblePlot(el, width, height, data, top, reformat_data) {
                 .attr("dy", ".3em")
                 .style("text-anchor", "middle")
                 .style("fill", "white")
-                .text(function(d) {return d.name.substring(0, d.r/4); });
+                .text(function(d) { return d.name.substring(0, d.r/4); });
     }
 
     drawChart(partialData);
