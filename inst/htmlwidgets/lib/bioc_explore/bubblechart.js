@@ -69,8 +69,9 @@ function drawBubblePlot(el, width, height, data, top, reformat_data) {
                     .transition(250)
                     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
                     .selectAll("circle")
-                    .attr("r", function(d) { return d.r; })
-                    .selectAll("text")
+                    .attr("r", function(d) { return d.r; });
+
+        bubbleSelect.selectAll("text")
                     .text(function(d) { return d.name.substring(0, d.r/4); });
 
         var bubbles = bubbleSelect.enter()
