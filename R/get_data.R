@@ -6,6 +6,7 @@
 #' @examples
 #' bioc_data <- get_bioc_data
 get_bioc_data <- function() {
+    message("Downloading package data...")
     full_data <- process_data(
         pkg_list = BiocPkgTools::getBiocPkgList(),
         raw_dl_stats = BiocPkgTools::getBiocDownloadStats()
@@ -18,6 +19,7 @@ get_bioc_data <- function() {
     full_data <- full_data %>%
         dplyr::filter(!is.na(tags))
 
+    message("Package data download complete")
     jsonlite::toJSON(full_data)
 }
 
