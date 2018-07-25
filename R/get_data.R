@@ -105,6 +105,7 @@ cache_last_update_days <- function() {
 
 # get cached json data
 get_cached_data <- function() {
+    message("Getting data from cache")
     cached_data_path <- system.file(
         "extdata",
         "data.Rds",
@@ -116,6 +117,7 @@ get_cached_data <- function() {
 
 # write json to cache location
 write_to_cache <- function(json_data) {
+    message("Writing data to cache")
     cached_data_path <- system.file(
         "extdata",
         package = "BiocExplorer"
