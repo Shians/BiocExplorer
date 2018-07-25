@@ -6,9 +6,9 @@
 #' @examples
 #' bioc_data <- get_bioc_data
 get_bioc_data <- function() {
-    if (has_cached_data() && cache_last_update_days() < 7) {
-        return(get_cached_data())
-    }
+    # if (has_cached_data() && cache_last_update_days() < 7) {
+    #     return(get_cached_data())
+    # }
 
     message("Downloading package data...")
     full_data <- process_data(
@@ -26,7 +26,7 @@ get_bioc_data <- function() {
     message("Package data download complete")
 
     json_data <- jsonlite::toJSON(full_data)
-    write_to_cache(json_data)
+    # write_to_cache(json_data)
 
     return(json_data)
 }
