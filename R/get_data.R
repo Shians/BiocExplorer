@@ -12,8 +12,8 @@ get_bioc_data <- function() {
 
     message("Downloading package data...")
     full_data <- process_data(
-        pkg_list = BiocPkgTools::getBiocPkgList(),
-        raw_dl_stats = BiocPkgTools::getBiocDownloadStats()
+        pkg_list = BiocPkgTools::biocPkgList(),
+        raw_dl_stats = BiocPkgTools::biocDownloadStats()
     )
 
     full_data$tags <- as.character(full_data$tags) %>%
